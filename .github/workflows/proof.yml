@@ -1,0 +1,21 @@
+name: proof
+
+# The CBOR reader, against the bytes the interactors really write -- including one captured
+# from a live RunPod endpoint. It needs no bus and no interactor, which is why it runs here.
+#
+# What cannot run here is the part that matters most: reaching a real interactor over shared
+# memory. That needs two processes and an iceoryx2 the runner has no reason to have, so it is
+# a person's command against a running interactor, not a job.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 proof/test_cbor.py
